@@ -53,6 +53,7 @@ cd pox
 ```bash
 sudo mn -c
 sudo killall pox.py
+sudo lsof -i :6633
 ```
 
 ### Step 2: Run POX controller
