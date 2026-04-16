@@ -38,8 +38,12 @@ h1 ---- s1 ---- h2
 sudo apt update
 sudo apt install mininet -y
 ```
-
-### 2. Clone POX
+### 2.1 Create File
+```bash
+cd ~/pox/pox/forwarding
+nano my_switch.py
+```
+### 2.2 Clone POX
 ```bash
 git clone https://github.com/noxrepo/pox.git
 cd pox
