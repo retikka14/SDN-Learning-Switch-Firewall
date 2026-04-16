@@ -67,7 +67,77 @@ cd ~/pox
 ### Step 3: Run Mininet (new terminal)
 ```bash
 sudo mn --controller=remote,ip=127.0.0.1,port=6633
+```## 🧪 Mininet Commands for Demonstration
+
+### 🔹 1. Show Nodes (Topology)
+```bash
+nodes
 ```
+
+---
+
+### 🔹 2. Show Network Links
+```bash
+net
+```
+
+---
+
+### 🔹 3. Check Host Configuration
+```bash
+h1 ifconfig
+h2 ifconfig
+```
+
+---
+
+### 🔹 4. Test Connectivity
+```bash
+pingall
+```
+
+### ✅ Expected Output:
+```
+*** Results: 0% dropped (2/2 received)
+```
+
+---
+
+### 🔹 5. Manual Ping Test
+```bash
+h1 ping -c 2 h2
+h2 ping -c 2 h1
+```
+
+---
+
+### 🔹 6. Display Flow Table
+```bash
+sh ovs-ofctl dump-flows s1
+```
+
+---
+
+### 🔹 7. Show Switch Details
+```bash
+dpctl show
+```
+
+---
+
+### 🔹 8. Bandwidth Test
+```bash
+iperf h1 h2
+```
+
+---
+
+### 🔹 9. Clear Flows (Optional Test)
+```bash
+sh ovs-ofctl del-flows s1
+pingall
+```
+
 
 ---
 
