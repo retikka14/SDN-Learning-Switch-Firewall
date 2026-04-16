@@ -1,115 +1,114 @@
-# SDN Learning Switch with Firewall (POX + Mininet)
+# SDN Learning Switch Controller using POX & Mininet
 
-## 📌 Problem Statement
-This project implements a Software Defined Networking (SDN) solution using Mininet and POX controller.  
-It demonstrates:
-- Learning switch behavior
-- Flow rule installation (match-action)
-- Firewall rule (blocking ICMP traffic selectively)
+## 📌 Project Overview
+This project implements a Software Defined Networking (SDN) Learning Switch Controller using the POX controller and Mininet emulator. The controller dynamically learns MAC addresses and installs flow rules to enable efficient packet forwarding between hosts.
 
 ---
 
-## 🧠 Objective
-- Understand controller–switch interaction  
-- Implement packet_in handling  
-- Design flow rules using OpenFlow  
-- Observe network behavior  
+## 🎯 Objectives
+- Implement MAC address learning logic  
+- Dynamically install OpenFlow rules  
+- Enable packet forwarding  
+- Inspect and verify flow table entries  
 
 ---
 
-## 🏗️ Topology
+## 🏗️ System Architecture
+- Controller: POX (OpenFlow 1.0)  
+- Emulator: Mininet  
+- Switch: Open vSwitch (OVS)  
+- Hosts: h1, h2  
 
+---
+
+## 🔌 Topology
+```
 h1 ---- s1 ---- h2
+```
 
-- h1: 10.0.0.1  
-- h2: 10.0.0.2  
-- s1: Open vSwitch  
+- 1 Switch (s1)  
+- 2 Hosts (h1, h2)  
 
 ---
 
-## ⚙️ Setup & Execution
+## ⚙️ Installation
 
-### Step 1: Clean Environment
+### 1. Install Mininet
+```bash
+sudo apt update
+sudo apt install mininet -y
+```
+
+### 2. Clone POX
+```bash
+git clone https://github.com/noxrepo/pox.git
+cd pox
+```
+
+---
+
+## 🚀 Execution Steps
+
+### Step 1: Clean environment
 ```bash
 sudo mn -c
 sudo killall pox.py
 ```
 
-### Step 2: Run POX Controller
+### Step 2: Run POX controller
 ```bash
 cd ~/pox
-./pox.py forwarding.my_switch
+./pox.py openflow.of_01 forwarding.my_switch
 ```
 
-### Step 3: Run Mininet
+### Step 3: Run Mininet (new terminal)
 ```bash
-sudo mn --controller=remote,ip=127.0.0.1,port=6633 --switch ovsk,protocols=OpenFlow10
+sudo mn --controller=remote,ip=127.0.0.1,port=6633
 ```
+
+---
+
+## 🧠 Controller Logic
+- Learns source MAC address and maps it to switch port  
+- Floods packet if destination is unknown  
+- Installs flow rules when destination is known  
+- Reduces controller load after learning  
 
 ---
 
 ## 🧪 Testing
 
-### 1. Check Connectivity
+### Run:
 ```bash
 pingall
 ```
 
-### 2. Firewall Behavior
-```bash
-h1 ping -c 2 h2   # BLOCKED ❌
-h2 ping -c 2 h1   # ALLOWED ✅
+### Expected Output:
+```
+*** Results: 0% dropped (2/2 received)
 ```
 
-### 3. Latency Test
-```bash
-h2 ping -c 5 h1
-```
+---
 
-### 4. Throughput Test
-```bash
-iperf h2 h1
-```
-
-### 5. Flow Table Inspection
+## 📊 Flow Table Inspection
 ```bash
 sh ovs-ofctl dump-flows s1
 ```
 
----
-
-## 🔥 Functionality
-
-### ✔ Learning Switch
-- Learns MAC → port mapping  
-- Installs flow rules dynamically  
-- Reduces controller load after learning  
-
-### ✔ Firewall Rule
-- Blocks ICMP traffic from:
-  10.0.0.1 → 10.0.0.2  
-
-- Allows reverse traffic:
-  10.0.0.2 → 10.0.0.1  
+### Observation:
+- Flow rules are dynamically installed  
+- Packets are forwarded without controller intervention after learning  
 
 ---
 
-## 📊 Observations
-
-- Latency: Low (milliseconds range)  
-- Throughput: High (Gbps range in Mininet)  
-- Flow rules dynamically installed  
-- Firewall successfully blocks one direction only  
-
----
-
-## 📸 Proof of Execution
-
-Include screenshots of:
-- pingall results  
-- h1 blocked and h2 allowed  
-- Controller logs showing BLOCKED IP  
-- Flow table output  
-- iperf results  
+## 📈 Performance Evaluation
+- Initial packets are flooded  
+- Subsequent packets are directly forwarded  
+- Reduced latency after rule installation  
+- Efficient bandwidth utilization  
 
 ---
+
+## ✅ Conclusion
+The project successfully demonstrates an SDN-based learning switch using POX and Mininet. The controller dynamically learns MAC addresses and installs flow rules, improving network efficiency and reducing latency.
+
