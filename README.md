@@ -67,7 +67,10 @@ cd ~/pox
 ### Step 3: Run Mininet (new terminal)
 ```bash
 sudo mn --controller=remote,ip=127.0.0.1,port=6633
-```## 🧪 Mininet Commands for Demonstration
+```
+
+
+## 🧪 Mininet Commands for Demonstration
 
 ### 🔹 1. Show Nodes (Topology)
 ```bash
@@ -138,35 +141,6 @@ sh ovs-ofctl del-flows s1
 pingall
 ```
 
-
----
-
-## 🧠 Controller Logic
-- Learns source MAC address and maps it to switch port  
-- Floods packet if destination is unknown  
-- Installs flow rules when destination is known  
-- Reduces controller load after learning  
-
----
-
-## 🧪 Testing
-
-### Run:
-```bash
-pingall
-```
-
-### Expected Output:
-```
-*** Results: 0% dropped (2/2 received)
-```
-
----
-
-## 📊 Flow Table Inspection
-```bash
-sh ovs-ofctl dump-flows s1
-```
 
 ### Observation:
 - Flow rules are dynamically installed  
