@@ -134,10 +134,6 @@ High bandwidth (e.g., Gbits/sec)
 sh ovs-ofctl dump-flows s1
 ```
 
-Filter packet counts:
-```bash
-sh ovs-ofctl dump-flows s1 | grep n_packets
-```
 
 ---
 
