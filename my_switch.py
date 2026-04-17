@@ -28,16 +28,19 @@ def _handle_PacketIn(event):
     ip = packet.find('ipv4')
     icmp = packet.find('icmp')
 
-    # Firewall: Block ICMP from h1 -> h2
+    # ✅ FIXED FIREWALL
     if ip and icmp:
         if str(ip.srcip) == "10.0.0.1" and str(ip.dstip) == "10.0.0.2":
-            log.info("BLOCKED ICMP: %s -> %s", ip.srcip, ip.dstip)
-            msg = of.ofp_flow_mod()
-            msg.match = of.ofp_match.from_packet(packet, event.port)
-            msg.idle_timeout = 10
-            msg.priority = 100
-            event.connection.send(msg)
-            return
+            if icmp.type == 8:  # ONLY request
+                log.info("BLOCKED ICMP REQUEST: %s -> %s", ip.srcip, ip.dstip)
+
+                msg = of.ofp_flow_mod()
+                msg.match = of.ofp_match.from_packet(packet, event.port)
+                msg.idle_timeout = 10
+                msg.priority = 100
+
+                event.connection.send(msg)
+                return
 
     # Learning switch
     if packet.dst in mac_to_port[dpid]:
@@ -49,12 +52,15 @@ def _handle_PacketIn(event):
         msg.priority = 10
         msg.actions.append(of.ofp_action_output(port=out_port))
         msg.data = event.ofp
+
         event.connection.send(msg)
+
     else:
         msg = of.ofp_packet_out()
         msg.data = event.ofp
         msg.actions.append(of.ofp_action_output(port=of.OFPP_FLOOD))
         event.connection.send(msg)
+
 
 def launch():
     log.info("Learning Switch + Firewall Started")
