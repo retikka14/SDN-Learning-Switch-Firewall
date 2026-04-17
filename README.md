@@ -26,6 +26,8 @@ We implement:
 ```bash
 sudo mn -c
 sudo killall pox.py
+sudo lsof -i :6633
+(sudo kill -9 <pid>)
 ```
 
 ---
