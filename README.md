@@ -26,23 +26,32 @@ We implement:
 ```bash
 sudo mn -c
 sudo killall pox.py
-sudo lsof -i :6633
 ```
-sudo kill -9 <pid>
+
 ---
 
-### 2. Go to POX Directory and paste the code
+### 2. Go to POX Directory
 ```bash
-cd ~/pox/pox/forwarding
-nano my_switch.py
+cd ~/pox
 ```
 
+---
+
+### 3. Create Controller Code
+```bash
+nano forwarding/my_switch.py
+```
+
+
+Save:
+```
+CTRL + X → Y → ENTER
+```
 
 ---
 
 ### 4. Run Controller (Terminal 1)
 ```bash
-cd ~/pox
 ./pox.py openflow.of_01 forwarding.my_switch
 ```
 
@@ -97,6 +106,14 @@ iperf h1 h2
 
 ---
 
+### Test 5: Packet Capture (Optional)
+```bash
+h1 tcpdump -i h1-eth0 -w capture.pcap &
+h1 ping -c 3 h2
+```
+
+---
+
 ## 📊 Observations
 
 - Controller installs flow rules dynamically
@@ -104,7 +121,3 @@ iperf h1 h2
 - Firewall blocks specific ICMP traffic
 - Flow table updates based on traffic
 - Throughput measured using iperf
-
----
-
-
