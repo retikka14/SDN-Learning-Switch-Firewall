@@ -1,3 +1,24 @@
+# SDN Mininet-Based Simulation Project – Learning Switch + Firewall
+
+## 📌 Problem Statement
+This project implements an SDN-based network using Mininet and POX controller to demonstrate:
+- Controller–switch interaction
+- Flow rule design (match–action)
+- Network behavior observation
+
+We implement:
+- Learning Switch (MAC learning + forwarding)
+- Firewall (block ICMP from h1 → h2)
+
+---
+
+## 🛠️ Requirements
+- Ubuntu (or VM)
+- Mininet
+- POX Controller
+- Open vSwitch
+
+---
 ## 🚀 Execution Steps (Clean + Complete)
 
 ### 1. Clean Previous Mininet & Controller
@@ -141,3 +162,23 @@ exit
 sudo mn -c
 sudo killall pox.py
 ```
+---
+## 📊 Observations
+
+- Controller installs flow rules dynamically
+- MAC learning reduces flooding
+- Firewall blocks specific ICMP traffic
+- Flow table updates based on traffic
+- Throughput measured using iperf
+
+---
+
+## ✅ Features Implemented
+
+- Learning Switch ✔️
+- Firewall (ICMP block) ✔️
+- Flow Rules (match-action) ✔️
+- PacketIn handling ✔️
+- Performance testing ✔️
+
+---
