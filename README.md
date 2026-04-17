@@ -26,8 +26,9 @@ We implement:
 ```bash
 sudo mn -c
 sudo killall pox.py
+sudo lsof -i :6633
 ```
-
+sudo kill -9 <pid>
 ---
 
 ### 2. Go to POX Directory and paste the code
