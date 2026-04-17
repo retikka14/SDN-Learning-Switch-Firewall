@@ -1,125 +1,143 @@
-# SDN Mininet-Based Simulation Project – Learning Switch + Firewall
+## 🚀 Execution Steps (Clean + Complete)
 
-## 📌 Problem Statement
-This project implements an SDN-based network using Mininet and POX controller to demonstrate:
-- Controller–switch interaction
-- Flow rule design (match–action)
-- Network behavior observation
-
-We implement:
-- Learning Switch (MAC learning + forwarding)
-- Firewall (block ICMP from h1 → h2)
-
----
-
-## 🛠️ Requirements
-- Ubuntu (or VM)
-- Mininet
-- POX Controller
-- Open vSwitch
-
----
-
-## ⚙️ Setup & Execution Steps
-
-### 1. Clean Environment
+### 1. Clean Previous Mininet & Controller
 ```bash
 sudo mn -c
 sudo killall pox.py
 sudo lsof -i :6633
-(sudo kill -9 <pid>)
+```
+
+If any PID is shown:
+```bash
+sudo kill -9 <PID>
 ```
 
 ---
 
-### 2. Go to POX Directory
+### 2. Navigate to POX Directory
 ```bash
 cd ~/pox
 ```
 
 ---
 
-### 3. Create Controller Code
+### 3. Edit/Create Controller Code
 ```bash
-nano forwarding/my_switch.py
+cd ~/pox/pox/forwarding
+nano my_switch.py
 ```
 
-
-Save:
+Paste your final controller code and save:
 ```
 CTRL + X → Y → ENTER
 ```
 
 ---
 
-### 4. Run Controller (Terminal 1)
+### 4. Start POX Controller
 ```bash
+cd ~/pox
 ./pox.py openflow.of_01 forwarding.my_switch
+```
+
+Expected output:
+```
+Learning Switch + Firewall Started
+[00-00-00-00-00-01] connected
 ```
 
 ---
 
-### 5. Run Mininet (Terminal 2)
+### 5. Start Mininet Topology (New Terminal)
 ```bash
 sudo mn --controller=remote,ip=127.0.0.1,port=6633
 ```
 
 ---
 
-## 🧪 Testing & Validation
+## 🧪 Testing Commands
 
-### Test 1: Connectivity
+### 6. Verify Topology
 ```bash
-pingall
-```
-
-Expected Output:
-```
-h1 -> X
-h2 -> h1
-*** Results: 50% dropped
+nodes
+net
 ```
 
 ---
 
-### Test 2: Manual Ping
+### 7. Check Host IP Configuration
 ```bash
-h1 ping -c 2 h2
-h2 ping -c 2 h1
-```
-
-Result:
-- h1 → h2 ❌ blocked
-- h2 → h1 ✅ allowed
-
----
-
-### Test 3: Flow Table
-```bash
-sh ovs-ofctl dump-flows s1
+h1 ifconfig
+h2 ifconfig
 ```
 
 ---
 
-### Test 4: Throughput
+### 8. Test Connectivity (Ping)
+
+#### Blocked Case:
+```bash
+h1 ping -c 3 h2
+```
+Expected: ❌ 100% packet loss (Blocked)
+
+#### Allowed Case:
+```bash
+h2 ping -c 3 h1
+```
+Expected: ✅ Successful ping
+
+---
+
+### 9. Test Latency
+```bash
+h2 ping -c 5 h1
+```
+
+---
+
+### 10. Test Throughput (iperf)
 ```bash
 iperf h1 h2
 ```
 
----
-
-### Test 5: Packet Capture (Optional)
-```bash
-h1 tcpdump -i h1-eth0 -w capture.pcap &
-h1 ping -c 3 h2
+Expected:
+```
+High bandwidth (e.g., Gbits/sec)
 ```
 
 ---
 
-## 📊 Observations
+### 11. View Flow Table
+```bash
+sh ovs-ofctl dump-flows s1
+```
 
-- Controller installs flow rules dynamically
-- MAC learning reduces flooding
-- Firewall blocks specific ICMP traffic
-- Flow table updates based on traffic
-- Throughput measured using iperf
+Filter packet counts:
+```bash
+sh ovs-ofctl dump-flows s1 | grep n_packets
+```
+
+---
+
+
+---
+
+## ✅ Expected Results Summary
+
+| Test Case | Result |
+|----------|--------|
+| h1 → h2 ping | ❌ Blocked |
+| h2 → h1 ping | ✅ Allowed |
+| iperf | ✅ Works |
+| Flow table | ✅ Rules installed |
+| tcpdump | ✅ Packets captured |
+
+---
+
+## 🧹 Cleanup After Execution
+```bash
+exit
+sudo mn -c
+sudo killall pox.py
+```
